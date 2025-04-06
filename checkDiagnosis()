@@ -1,0 +1,22 @@
+function checkDiagnosis() {
+    const symptoms = document.getElementById('symptoms').value.toLowerCase();
+    const diagnosisElement = document.getElementById('diagnosis');
+
+    // More symptom combinations
+    if (symptoms.includes('fever') && symptoms.includes('cough')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Flu or Cold. Please consult a healthcare professional.";
+    } else if (symptoms.includes('headache') && symptoms.includes('nausea')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Migraine. Please consult a healthcare professional.";
+    } else if (symptoms.includes('chest pain') && symptoms.includes('shortness of breath')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Heart issues. Seek immediate medical attention.";
+    } else if (symptoms.includes('fatigue') && symptoms.includes('joint pain')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Arthritis or Viral Infection.";
+    } else if (symptoms.includes('stomach pain') && symptoms.includes('vomiting')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Gastroenteritis. Please consult a healthcare professional.";
+    } else if (symptoms.includes('sore throat') && symptoms.includes('difficulty swallowing')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Strep Throat or Tonsillitis. Please consult a healthcare professional.";
+    } else {
+        // Default message when no symptoms match
+        diagnosisElement.innerText = "Diagnosis not available. Please consult a healthcare professional for a proper diagnosis.";
+    }
+}
