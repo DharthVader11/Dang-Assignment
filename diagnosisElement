@@ -1,0 +1,34 @@
+function checkDiagnosis() {
+    const symptoms = document.getElementById('symptoms').value.toLowerCase();
+    const diagnosisElement = document.getElementById('diagnosis');
+    const remediesElement = document.getElementById('remedies');
+
+    // Clear previous messages
+    diagnosisElement.innerText = "";
+    remediesElement.innerText = "";
+
+    // Matching some common symptoms with remedies
+    if (symptoms.includes('fever') && symptoms.includes('cough')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Flu or Cold.";
+        remediesElement.innerText = "Remedies: Drink plenty of fluids, rest, and consider using over-the-counter medications like paracetamol for fever.";
+    } else if (symptoms.includes('headache') && symptoms.includes('nausea')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Migraine.";
+        remediesElement.innerText = "Remedies: Rest in a dark, quiet room, drink water, and consider over-the-counter pain relief like ibuprofen.";
+    } else if (symptoms.includes('chest pain') && symptoms.includes('shortness of breath')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Heart issues. Seek immediate medical attention.";
+        remediesElement.innerText = "Remedies: Immediate medical care is required. Please call emergency services.";
+    } else if (symptoms.includes('fatigue') && symptoms.includes('joint pain')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Arthritis or Viral Infection.";
+        remediesElement.innerText = "Remedies: Rest, stay hydrated, and consider over-the-counter anti-inflammatory medications like ibuprofen.";
+    } else if (symptoms.includes('stomach pain') && symptoms.includes('vomiting')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Gastroenteritis.";
+        remediesElement.innerText = "Remedies: Drink plenty of fluids, eat light foods, and rest. Avoid spicy or fatty foods.";
+    } else if (symptoms.includes('sore throat') && symptoms.includes('difficulty swallowing')) {
+        diagnosisElement.innerText = "Possible Diagnosis: Strep Throat or Tonsillitis.";
+        remediesElement.innerText = "Remedies: Drink warm tea with honey, gargle with salt water, and consider over-the-counter pain relievers.";
+    } else {
+        // Flexible message
+        diagnosisElement.innerText = "Diagnosis not available.";
+        remediesElement.innerText = "Remedies: Please monitor your symptoms. If they worsen, consider seeking medical advice.";
+    }
+}
