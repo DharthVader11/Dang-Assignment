@@ -29,6 +29,12 @@
             margin-bottom: 20px;
         }
 
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
         input, button {
             width: 100%;
             padding: 10px;
@@ -50,12 +56,38 @@
         p {
             text-align: center;
             font-size: 18px;
+            margin: 15px 0;
         }
 
         .remedies {
             margin-top: 20px;
             font-size: 16px;
             color: #555;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .remedies h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .remedies ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .remedies li {
+            margin-bottom: 10px;
+        }
+
+        .remedies .note {
+            font-style: italic;
+            color: #777;
         }
     </style>
 </head>
@@ -66,11 +98,97 @@
         <input type="text" id="symptoms" placeholder="e.g., fever, cough, headache">
         <button onclick="checkDiagnosis()">Get Diagnosis</button>
         <p id="diagnosis"></p>
-        <div class="remedies" id="remedies"></div> <!-- This is where remedies will show -->
+        
+        <!-- Remedies Section -->
+        <div class="remedies" id="remedies">
+            <h3>Suggested Remedies:</h3>
+            <ul id="remedy-list"></ul>
+            <p class="note">Note: These are general recommendations. Always consult a healthcare professional for serious conditions.</p>
+        </div>
     </div>
 
     <script>
-        // Include the checkDiagnosis function here (the updated one from above)
+        function checkDiagnosis() {
+            const symptoms = document.getElementById('symptoms').value.toLowerCase();
+            const diagnosisElement = document.getElementById('diagnosis');
+            const remediesElement = document.getElementById('remedies');
+            const remedyListElement = document.getElementById('remedy-list');
+
+            // Clear previous diagnosis and remedies
+            diagnosisElement.innerText = "";
+            remedyListElement.innerHTML = "";  // Clear previous remedies
+            remediesElement.style.display = "none";  // Hide remedies section initially
+
+            // Diagnosis and remedies based on symptoms
+            if (symptoms.includes('fever') && symptoms.includes('cough')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Flu or Cold.";
+                const remedies = [
+                    "Drink plenty of fluids (water, herbal teas, clear soups).",
+                    "Rest and avoid strenuous activities.",
+                    "Use over-the-counter medications like paracetamol for fever."
+                ];
+                showRemedies(remedies);
+            } else if (symptoms.includes('headache') && symptoms.includes('nausea')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Migraine.";
+                const remedies = [
+                    "Rest in a quiet, dark room.",
+                    "Stay hydrated with water or electrolyte drinks.",
+                    "Consider using over-the-counter pain relief like ibuprofen."
+                ];
+                showRemedies(remedies);
+            } else if (symptoms.includes('chest pain') && symptoms.includes('shortness of breath')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Heart issues. Seek immediate medical attention.";
+                const remedies = [
+                    "Call emergency services immediately.",
+                    "Do not attempt to drive yourself to the hospital."
+                ];
+                showRemedies(remedies);
+            } else if (symptoms.includes('fatigue') && symptoms.includes('joint pain')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Arthritis or Viral Infection.";
+                const remedies = [
+                    "Rest and stay hydrated.",
+                    "Consider taking over-the-counter anti-inflammatory medications like ibuprofen.",
+                    "Consult a healthcare provider for long-term treatment."
+                ];
+                showRemedies(remedies);
+            } else if (symptoms.includes('stomach pain') && symptoms.includes('vomiting')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Gastroenteritis.";
+                const remedies = [
+                    "Drink plenty of fluids to stay hydrated (oral rehydration solutions are recommended).",
+                    "Eat light foods like plain rice, crackers, and toast.",
+                    "Avoid spicy, fatty, or dairy-heavy foods."
+                ];
+                showRemedies(remedies);
+            } else if (symptoms.includes('sore throat') && symptoms.includes('difficulty swallowing')) {
+                diagnosisElement.innerText = "Possible Diagnosis: Strep Throat or Tonsillitis.";
+                const remedies = [
+                    "Gargle with warm salt water to relieve throat pain.",
+                    "Drink warm tea with honey or lemon.",
+                    "Use over-the-counter pain relievers for relief."
+                ];
+                showRemedies(remedies);
+            } else {
+                // Default message if no matching symptoms
+                diagnosisElement.innerText = "Diagnosis not available.";
+                const remedies = [
+                    "Please monitor your symptoms closely.",
+                    "If symptoms worsen, seek medical advice from a healthcare professional."
+                ];
+                showRemedies(remedies);
+            }
+        }
+
+        // Function to display remedies
+        function showRemedies(remedies) {
+            const remedyListElement = document.getElementById('remedy-list');
+            remedies.forEach(remedy => {
+                const listItem = document.createElement('li');
+                listItem.textContent = remedy;
+                remedyListElement.appendChild(listItem);
+            });
+            // Show the remedies section after updating the list
+            document.getElementById('remedies').style.display = "block";
+        }
     </script>
 </body>
 </html>
