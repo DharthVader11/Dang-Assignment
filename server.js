@@ -1,50 +1,58 @@
-// server.js - Backend Server (Express)
+// server.js
 
 const express = require('express');
-const mongoose = require('mongoose');
+const axios = require('axios');
+const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/symptomsDB', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to the database'))
-  .catch(err => console.log(err));
+// Body parser middleware to handle form data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Define the schemas for Symptoms, Diseases, and Remedies
-const symptomSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  relatedDiseases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Disease' }],
-  remedies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Remedy' }]
-});
+// OpenAI API Key - Replace this with your actual OpenAI API key
+const OPENAI_API_KEY = 'your-openai-api-key';
 
-const diseaseSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-});
+// API Route to handle symptom queries
+app.post('/ask', async (req, res) => {
+  const { symptomDescription } = req.body;
 
-const remedySchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  instructions: String
-});
+  if (!symptomDescription) {
+    return res.status(400).json({ message: 'Symptom description is required.' });
+  }
 
-// Create Models for Symptoms, Diseases, and Remedies
-const Symptom = mongoose.model('Symptom', symptomSchema);
-const Disease = mongoose.model('Disease', diseaseSchema);
-const Remedy = mongoose.model('Remedy', remedySchema);
+  // Construct a prompt for ChatGPT to provide diagnosis and remedies
+  const prompt = `The user is describing a symptom: "${symptomDescription}". Based on this symptom, provide a diagnosis and suggest remedies.`;
 
-// API Route to get all symptoms
-app.get('/api/symptoms', async (req, res) => {
   try {
-    const symptoms = await Symptom.find().populate('relatedDiseases remedies');
-    res.json(symptoms);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching symptoms' });
+    // Make a request to the OpenAI API to get the response from ChatGPT
+    const response = await axios.post(
+      'https://api.openai.com/v1/completions',
+      {
+        model: 'gpt-3.5-turbo', // You can also use 'gpt-4' if you have access
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 150,
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const answer = response.data.choices[0].message.content;
+
+    // Send the answer back to the frontend
+    res.json({ answer });
+  } catch (error) {
+    console.error('Error with OpenAI API:', error);
+    res.status(500).json({ message: 'Something went wrong with the request.' });
   }
 });
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
