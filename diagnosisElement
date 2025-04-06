@@ -32,3 +32,4 @@ function checkDiagnosis() {
         remediesElement.innerText = "Remedies: Please monitor your symptoms. If they worsen, consider seeking medical advice.";
     }
 }
+
