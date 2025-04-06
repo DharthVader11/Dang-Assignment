@@ -51,6 +51,12 @@
             text-align: center;
             font-size: 18px;
         }
+
+        .remedies {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -60,26 +66,11 @@
         <input type="text" id="symptoms" placeholder="e.g., fever, cough, headache">
         <button onclick="checkDiagnosis()">Get Diagnosis</button>
         <p id="diagnosis"></p>
+        <div class="remedies" id="remedies"></div> <!-- This is where remedies will show -->
     </div>
 
     <script>
-        function checkDiagnosis() {
-            const symptoms = document.getElementById('symptoms').value.toLowerCase();
-            const diagnosisElement = document.getElementById('diagnosis');
-            
-            // Simple rule-based diagnosis
-            if (symptoms.includes('fever') && symptoms.includes('cough')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Flu or Cold. Please consult a healthcare professional.";
-            } else if (symptoms.includes('headache') && symptoms.includes('nausea')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Migraine. Please consult a healthcare professional.";
-            } else if (symptoms.includes('chest pain') && symptoms.includes('shortness of breath')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Heart issues. Seek immediate medical attention.";
-            } else if (symptoms.includes('fatigue') && symptoms.includes('joint pain')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Arthritis or Viral Infection.";
-            } else {
-                diagnosisElement.innerText = "Diagnosis not available. Please consult a healthcare professional for a proper diagnosis.";
-            }
-        }
+        // Include the checkDiagnosis function here (the updated one from above)
     </script>
 </body>
 </html>
