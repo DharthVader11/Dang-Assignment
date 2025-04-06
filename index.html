@@ -1,120 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Symptom Checker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symptom Checker</title>
+  <script>
+    async function getDiagnosisAndRemedy() {
+      const symptomDescription = document.getElementById('symptomDescription').value;
 
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
+      if (!symptomDescription) {
+        alert('Please enter a symptom description!');
+        return;
+      }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      // Send the symptom description to the backend server
+      const response = await fetch('/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ symptomDescription })
+      });
 
-        label {
-            font-size: 16px;
-            margin-bottom: 8px;
-            display: block;
-        }
+      const data = await response.json();
 
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        p {
-            text-align: center;
-            font-size: 18px;
-            margin: 15px 0;
-        }
-
-        .remedies {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #555;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-    </style>
+      if (response.ok) {
+        document.getElementById('result').innerText = `Diagnosis & Remedies:\n\n${data.answer}`;
+      } else {
+        document.getElementById('result').innerText = `Error: ${data.message}`;
+      }
+    }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Symptom Checker</h1>
-        <label for="symptoms">Enter your symptoms:</label>
-        <input type="text" id="symptoms" placeholder="e.g., fever, cough, headache">
-        <button onclick="checkDiagnosis()">Get Diagnosis</button>
-        <p id="diagnosis"></p>
-        <div class="remedies" id="remedies"></div> <!-- Remedies will appear here -->
-    </div>
+  <h1>Symptom Checker</h1>
 
-    <script>
-        function checkDiagnosis() {
-            const symptoms = document.getElementById('symptoms').value.toLowerCase();
-            const diagnosisElement = document.getElementById('diagnosis');
-            const remediesElement = document.getElementById('remedies');
+  <label for="symptomDescription">Enter your symptom:</label><br>
+  <textarea id="symptomDescription" rows="4" cols="50"></textarea><br><br>
 
-            // Clear previous messages
-            diagnosisElement.innerText = "";
-            remediesElement.innerText = "";
+  <button onclick="getDiagnosisAndRemedy()">Get Diagnosis and Remedy</button>
 
-            // Diagnosis and remedies based on symptoms
-            if (symptoms.includes('fever') && symptoms.includes('cough')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Flu or Cold.";
-                remediesElement.innerText = "Remedies: Drink plenty of fluids, rest, and consider using over-the-counter medications like paracetamol for fever.";
-            } else if (symptoms.includes('headache') && symptoms.includes('nausea')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Migraine.";
-                remediesElement.innerText = "Remedies: Rest in a dark, quiet room, drink water, and consider over-the-counter pain relief like ibuprofen.";
-            } else if (symptoms.includes('chest pain') && symptoms.includes('shortness of breath')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Heart issues. Seek immediate medical attention.";
-                remediesElement.innerText = "Remedies: Immediate medical care is required. Please call emergency services.";
-            } else if (symptoms.includes('fatigue') && symptoms.includes('joint pain')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Arthritis or Viral Infection.";
-                remediesElement.innerText = "Remedies: Rest, stay hydrated, and consider over-the-counter anti-inflammatory medications like ibuprofen.";
-            } else if (symptoms.includes('stomach pain') && symptoms.includes('vomiting')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Gastroenteritis.";
-                remediesElement.innerText = "Remedies: Drink plenty of fluids, eat light foods, and rest. Avoid spicy or fatty foods.";
-            } else if (symptoms.includes('sore throat') && symptoms.includes('difficulty swallowing')) {
-                diagnosisElement.innerText = "Possible Diagnosis: Strep Throat or Tonsillitis.";
-                remediesElement.innerText = "Remedies: Drink warm tea with honey, gargle with salt water, and consider over-the-counter pain relievers.";
-            } else {
-                // Default message if no matching symptoms
-                diagnosisElement.innerText = "Diagnosis not available.";
-                remediesElement.innerText = "Remedies: Please monitor your symptoms. If they worsen, consider seeking medical advice.";
-            }
-        }
-    </script>
+  <h3>Response:</h3>
+  <pre id="result"></pre>
 </body>
 </html>
