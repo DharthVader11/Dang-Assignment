@@ -10,8 +10,8 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// OpenAI API Key - Replace this with your actual OpenAI API key
-const OPENAI_API_KEY = 'your-openai-api-key';
+// OpenAI API Key (you need to get this from OpenAI)
+const OPENAI_API_KEY = 'your-openai-api-key'; // Replace this with your OpenAI API key
 
 // API Route to handle symptom queries
 app.post('/ask', async (req, res) => {
@@ -27,11 +27,11 @@ app.post('/ask', async (req, res) => {
   try {
     // Make a request to the OpenAI API to get the response from ChatGPT
     const response = await axios.post(
-      'https://api.openai.com/v1/completions',
+      'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-3.5-turbo', // You can also use 'gpt-4' if you have access
+        model: 'gpt-3.5-turbo', // You can use 'gpt-4' if you have access
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 150,
+        max_tokens: 200,
         temperature: 0.7,
       },
       {
